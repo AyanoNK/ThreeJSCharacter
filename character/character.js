@@ -136,6 +136,63 @@ function addSmallSphere() {
     scene.add( sphere );
 }
 
+//create lightpoint
+function createLightPoint(){
+    var lightPoint = new THREE.DirectionalLight(0x404040, 10);
+    lightPoint.name = "DirectionalLight";
+    lightPoint.position.y += 30;
+    scene.add(lightPoint);
+    
+}
+
+
+function addExampleCube(){
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF
+    });
+    var cube = new THREE.Mesh( geometry, material );
+    cube.name = "cubo";
+    scene.add( cube );
+    cube.position.z -=10;
+}
+
+
+function addTorus() {
+    var geometry = new THREE.TorusGeometry( 1, 0.2, 160, 500, 6);
+    var material = new THREE.MeshPhongMaterial({
+        color: 0xffff00
+    });
+    var torus = new THREE.Mesh( geometry, material );
+    scene.add( torus );
+    torus.rotation.x += 3;
+    torus.position.x += 3;
+    torus.position.y +=1;
+    torus.position.z -=9;
+}
+
+function addCilinder() {
+    var geometry = new THREE.CylinderGeometry( 1, 1, 2, 32, 32 );
+    var material = new THREE.MeshPhongMaterial({
+        color: 0xff3f32
+    });
+    var cylinder = new THREE.Mesh( geometry, material );
+    scene.add( cylinder );
+    cylinder.position.x-=3;
+    cylinder.position.z -=10;
+}
+
+function addCone() {
+    var geometry = new THREE.ConeGeometry( 1, 1, 32 );
+    var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
+    var cone = new THREE.Mesh( geometry, material );
+    scene.add( cone );
+    cone.position.y -= 3;
+    cone.position.z -=10;
+}
+
+
+
 init();
 
 //Mario by cubes
@@ -314,6 +371,12 @@ addCube(3,1, brown);
 addCube(4,1, brown);
 addCube(5,1, brown);
 addCube(6,1, brown);
+
+createLightPoint();
+addExampleCube();
+addTorus();
+addCilinder();
+addCone();
 
 addPlane();
 addBigSphere();
