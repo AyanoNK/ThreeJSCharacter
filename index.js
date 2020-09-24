@@ -94,8 +94,11 @@ function addCone() {
     var material = new THREE.MeshPhongMaterial( {color: 0x00ff00} );
     var cone = new THREE.Mesh( geometry, material );
     scene.add( cone );
-    cone.position.y -= 3
+    cone.position.y -= 3;
 }
+
+ 
+
 
 //inits
 init();

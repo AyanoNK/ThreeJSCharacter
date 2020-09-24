@@ -1,4 +1,5 @@
 import {OrbitControls} from "../threejs/OrbitControls.js";
+
 //globals
 var scene;
 var camera;
@@ -36,10 +37,13 @@ function createCamera() {
         90, //fov
         window.innerWidth / window.innerHeight, //aspect
         0.1, //near
-        100 //far
+        2000 //far
     );
-    camera.position.z = 20;
-    camera.position.y = 10;
+    
+    camera.position.set(0,0,60);
+    
+   
+    camera.translateZ(50);
 }
 
 function renderLoop() {
@@ -49,10 +53,6 @@ function renderLoop() {
 }
 
 /*END OF PAGE CONFIG*/
-
-
-//create lightpoint
-
 function addCube(xaxis,yaxis, materialcolor){
     
     var geometry = new THREE.BoxGeometry( 1, 1, 1 );
@@ -62,6 +62,7 @@ function addCube(xaxis,yaxis, materialcolor){
     var line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial({
         color: 0x000000
     }));
+    line.name = "Cube Edges";
     
 
     var material = new THREE.MeshBasicMaterial({
@@ -91,16 +92,49 @@ function addCube(xaxis,yaxis, materialcolor){
     } else {
         cube.name = "Cube";
     }
-    
-    
     scene.add( line );
     scene.add( cube );
 }
 
+function addLight () {
+    var light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.setScalar(10);
+    scene.add(light);
+}
 
+function addPlane () {
+    var geometry = new THREE.PlaneGeometry( 150, 106, 1, 1 );
+    
 
+    
+    //create texture
+    var texture = new THREE.TextureLoader().load('./img/background.jpg');
 
+    var material = new THREE.MeshBasicMaterial({
+        map: texture
+    });
+    var plane = new THREE.Mesh( geometry, material );
+    plane.position.set(13, 42, -0.53);
+    scene.add( plane );
+}
 
+function addBigSphere () {
+    var geometry = new THREE.SphereGeometry( 4, 32, 32);
+    var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+    var sphere = new THREE.Mesh( geometry, material );
+    sphere.position.set(32, 40, 5);
+    sphere.scale.set(1, 0.7, 1);
+    scene.add( sphere );
+}
+
+function addSmallSphere() {
+    var geometry = new THREE.SphereGeometry( 2.4, 32, 32);
+    var material = new THREE.MeshBasicMaterial( {color: 0xdbc377} );
+    var sphere = new THREE.Mesh( geometry, material );
+    sphere.position.set(32, 38, 5);
+    sphere.scale.set(1, 1, 1);
+    scene.add( sphere );
+}
 
 init();
 
@@ -281,5 +315,7 @@ addCube(4,1, brown);
 addCube(5,1, brown);
 addCube(6,1, brown);
 
-
+addPlane();
+addBigSphere();
+addSmallSphere();
 renderLoop();
