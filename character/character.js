@@ -214,6 +214,72 @@ addCube(5,7, brown);
 addCube(6,7, brown);
 
 //eleventh line
+addCube(-5,6, yellow);
+addCube(-4,6, yellow);
+addCube(-3,6, brown);
+addCube(-2,6, red);
 addCube(-1,6, yellow);
+addCube(0,6, red);
+addCube(1,6, red);
+addCube(2,6, yellow);
+addCube(3,6, red);
+addCube(4,6, brown);
+addCube(5,6, yellow);
+addCube(6,6, yellow);
+
+//twelfth line
+addCube(-5,5, yellow);
+addCube(-4,5, yellow);
+addCube(-3,5, yellow);
+addCube(-2,5, red);
+addCube(-1,5, red);
+addCube(0,5, red);
+addCube(1,5, red);
+addCube(2,5, red);
+addCube(3,5, red);
+addCube(4,5, yellow);
+addCube(5,5, yellow);
+addCube(6,5, yellow);
+
+//thirteenth line
+addCube(-5,4, yellow);
+addCube(-4,4, yellow);
+addCube(-3,4, red);
+addCube(-2,4, red);
+addCube(-1,4, red);
+addCube(0,4, red);
+addCube(1,4, red);
+addCube(2,4, red);
+addCube(3,4, red);
+addCube(4,4, red);
+addCube(5,4, yellow);
+addCube(6,4, yellow);
+
+//fourteenth line
+addCube(-3,3, red);
+addCube(-2,3, red);
+addCube(-1,3, red);
+addCube(2,3, red);
+addCube(3,3, red);
+addCube(4,3, red);
+
+//fiftteenth line
+addCube(-4,2, brown);
+addCube(-3,2, brown);
+addCube(-2,2, brown);
+addCube(3,2, brown);
+addCube(4,2, brown);
+addCube(5,2, brown);
+
+//sixteenth line
+addCube(-5,1, brown);
+addCube(-4,1, brown);
+addCube(-3,1, brown);
+addCube(-2,1, brown);
+addCube(3,1, brown);
+addCube(4,1, brown);
+addCube(5,1, brown);
+addCube(6,1, brown);
+
 
 renderLoop();
