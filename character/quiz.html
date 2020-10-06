@@ -7,6 +7,8 @@
   </head>
   <body>
     <div id="Stats-output"></div>
+
+    <submit id="submitadd">Agregar</submit>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script>
@@ -16,7 +18,7 @@
       var camera;
       var renderer;
       var controls;
-
+      var height;
       //colors
       var red = 0xfd0001;
       var brown = 0x814e19;
@@ -25,7 +27,7 @@
       var cube;
 
       var controls = new (function () {
-        this.scale = 0;
+        this.scale = 1;
       })();
 
       var gui = new dat.GUI();
@@ -52,7 +54,7 @@
 
       function createCamera() {
         camera = new THREE.PerspectiveCamera(
-          90, //fov
+          80, //fov
           window.innerWidth / window.innerHeight, //aspect
           0.1, //near
           2000 //far
@@ -70,7 +72,12 @@
       }
 
       /*END OF PAGE CONFIG*/
-      function addCube(xaxis, zaxis, height, materialcolor) {
+      function addCube(xaxis, zaxis, materialcolor) {
+        height = Math.floor(Math.random() * 10);
+        if (height > 6) {
+          height = 4;
+        }
+
         var geometry = new THREE.BoxGeometry(6, 30, 6);
 
         //to show edges
@@ -97,6 +104,22 @@
         scene.add(cube);
       }
 
+      function divisorFinder(n) {
+        if (n == 1 || n == 2 || n == 3) return red;
+        if (n == 4 || n == 5 || n == 6) return yellow;
+        else return brown;
+      }
+
+      function addSubmit() {
+        value1 = Math.floor(Math.random() * 10) * 4;
+        value2 = Math.floor(Math.random() * 10) * 4;
+        value3 = Math.floor(Math.random() * 10);
+        addCube(value1, value2, divisorFinder(value3));
+        requestAnimationFrame(animate);
+
+        document.getElementById("submitadd").appendChild(stats.domElement);
+      }
+
       function addPlane() {
         var geometry = new THREE.PlaneGeometry(150, 106, 1, 1);
 
@@ -104,16 +127,17 @@
           color: "#fff",
         });
         var plane = new THREE.Mesh(geometry, material);
-        plane.position.y -= 6;
+        plane.position.y -= 0;
         plane.rotation.x = 17.3;
         scene.add(plane);
       }
 
       //create lightpoint
-      function createLightPoint() {
+      function createLightPoint(xaxis, zaxis) {
         var lightPoint = new THREE.DirectionalLight(0x404040, 10);
         lightPoint.name = "DirectionalLight";
-        lightPoint.position.y += 30;
+        lightPoint.position.y += xaxis;
+        lightPoint.position.z += zaxis;
         scene.add(lightPoint);
       }
 
@@ -139,19 +163,19 @@
       }
 
       init();
-      addCube(-2, 16, 3, red);
-      addCube(-2, 16, 1, red);
-      addCube(10, 16, 1, red);
-      addCube(17, 1, 0, red);
-      addCube(20, 40, 0, yellow);
-      addCube(40, 40, 0, yellow);
-      addCube(50, 50, 1, brown);
-      addCube(0, -50, 1, brown);
-      addCube(-50, 0, 1, brown);
-      addCube(0, 0, 1, brown);
-      addCube(-50, -50, 3, brown);
-      addCube(-20, -20, 3, yellow);
-      createLightPoint();
+
+      addCube(-2, 16, red);
+      addCube(10, 16, red);
+      addCube(17, 1, red);
+      addCube(20, 40, yellow);
+      addCube(40, 40, yellow);
+      addCube(50, 50, brown);
+      addCube(0, -50, brown);
+      addCube(-50, 0, brown);
+      addCube(0, 0, brown);
+      addCube(-50, -50, brown);
+      createLightPoint(30, 20);
+      addSubmit();
       requestAnimationFrame(animate);
 
       addPlane();
