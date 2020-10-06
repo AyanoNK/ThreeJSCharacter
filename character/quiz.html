@@ -25,7 +25,7 @@
       var cube;
 
       var controls = new (function () {
-        this.scale = 0.02;
+        this.scale = 0;
       })();
 
       var gui = new dat.GUI();
@@ -35,6 +35,7 @@
       function init() {
         //create scene
         scene = new THREE.Scene();
+        scene.fog = THREE.Fog(0xffffff);
         //create camera
         createCamera();
         //create renderer
@@ -73,7 +74,7 @@
         var geometry = new THREE.BoxGeometry(6, 30, 6);
 
         //to show edges
-        var material = new THREE.MeshBasicMaterial({
+        var material = new THREE.MeshPhongMaterial({
           color: materialcolor,
         });
 
@@ -103,9 +104,17 @@
           color: "#fff",
         });
         var plane = new THREE.Mesh(geometry, material);
-        plane.position.y -= 15;
+        plane.position.y -= 6;
         plane.rotation.x = 17.3;
         scene.add(plane);
+      }
+
+      //create lightpoint
+      function createLightPoint() {
+        var lightPoint = new THREE.DirectionalLight(0x404040, 10);
+        lightPoint.name = "DirectionalLight";
+        lightPoint.position.y += 30;
+        scene.add(lightPoint);
       }
 
       function initStats() {
@@ -142,7 +151,7 @@
       addCube(0, 0, 1, brown);
       addCube(-50, -50, 3, brown);
       addCube(-20, -20, 3, yellow);
-
+      createLightPoint();
       requestAnimationFrame(animate);
 
       addPlane();
