@@ -36,6 +36,12 @@
         };
       })();
 
+      function divisorFinder(n) {
+        if (n == 1 || n == 2 || n == 3) return red;
+        if (n == 4 || n == 5 || n == 6) return yellow;
+        else return brown;
+      }
+
       var gui = new dat.GUI();
       gui.add(controls, "scale", 0, 5);
       gui.add(controls, "add_Building");
@@ -108,12 +114,6 @@
           cube.name = "Cube";
         }
         scene.add(cube);
-      }
-
-      function divisorFinder(n) {
-        if (n == 1 || n == 2 || n == 3) return red;
-        if (n == 4 || n == 5 || n == 6) return yellow;
-        else return brown;
       }
 
       function addPlane() {
