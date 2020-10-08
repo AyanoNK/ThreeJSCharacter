@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bezier</title>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script>
+
+    <script>
+      var scene;
+      var camera;
+      var renderer;
+      var controls;
+      var mesh = null;
+
+      //colors
+      var red = 0xfd0001;
+      var brown = 0x814e19;
+      var yellow = 0xfbc33b;
+
+      /*BEGINNING OF PAGE CONFIG*/
+      function init() {
+        //create scene
+        scene = new THREE.Scene();
+        //create camera
+        createCamera();
+        //create renderer
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+        });
+        //set renderer size
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        scene.background = new THREE.Color(0x353839);
+      }
+
+      function createCamera() {
+        camera = new THREE.PerspectiveCamera(
+          90, //fov
+          window.innerWidth / window.innerHeight, //aspect
+          0.1, //near
+          2000 //far
+        );
+
+        camera.position.set(0, 0, 60);
+
+        camera.translateZ(50);
+      }
+
+      function renderLoop() {
+        requestAnimationFrame(renderLoop);
+        renderer.render(scene, camera);
+      }
+      /*END OF PAGE CONFIG*/
+
+      function initMesh() {
+        var loader = new THREE.ObjectLoader();
+        loader.load("./beizer.json", function (geometry) {
+          mesh = new THREE.Mesh(geometry);
+          scene.add(mesh);
+        });
+      }
+
+      init();
+      initMesh();
+
+      renderLoop();
+    </script>
+  </body>
+</html>
