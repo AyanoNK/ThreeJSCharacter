@@ -131,6 +131,7 @@
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
         sphere.rotation.z = Date.now()* 0.0002;
+        sphere.position.x += 0.0005;
       }
       init();
 
