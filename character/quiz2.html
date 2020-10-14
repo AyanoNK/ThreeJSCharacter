@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personaje</title>
+  </head>
+  <body>
+    <div id="Stats-output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script>
+    <script>
+      //globals
+      var scene;
+      var camera;
+      var renderer;
+      var controls;
+      var height;
+      //colors
+      var red = 0xfd0001;
+      var brown = 0x814e19;
+      var yellow = 0xfbc33b;
+      var stats = initStats();
+      var cube;
+
+      var controls = new (function () {
+        this.scale = 1;
+      })();
+
+      function divisorFinder(n) {
+        if (n == 1 || n == 2 || n == 3) return red;
+        if (n == 4 || n == 5 || n == 6) return yellow;
+        else return brown;
+      }
+
+      var gui = new dat.GUI();
+      gui.add(controls, "scale", 0, 5);
+
+      /*BEGINNING OF PAGE CONFIG*/
+      function init() {
+        //create scene
+        scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0xffffff, 10, 100);
+        //create camera
+        createCamera();
+        //create renderer
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+        });
+        //set renderer size
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        scene.background = new THREE.Color(0x353839);
+        //scene.background = new THREE.Color(0xFFFFFF);
+      }
+
+      function createCamera() {
+        camera = new THREE.PerspectiveCamera(
+          80, //fov
+          window.innerWidth / window.innerHeight, //aspect
+          0.1, //near
+          2000 //far
+        );
+
+
+        camera.translateZ(50);
+      }
+
+      function renderLoop() {
+        requestAnimationFrame(renderLoop);
+        renderer.render(scene, camera);
+      }
+
+      
+
+
+      var material;
+      var sphere;
+      /*END OF PAGE CONFIG*/
+      function addSphere(location, xaxis) {
+        var geometry = new THREE.SphereGeometry( 5, 32, 32 );
+        material = texture1(location);
+        sphere = new THREE.Mesh( geometry, material );
+        sphere.name = 'planet';
+        sphere.castShadow = true;
+        sphere.position.x += xaxis;
+        scene.add(sphere);
+      }
+
+      function texture1(location) {
+        var texture = new THREE.Texture();
+        var loader = new THREE.ImageLoader();
+        loader.load(location, function (image) {
+          texture.image = image;
+          texture.needsUpdate = true;
+        });
+        material = new THREE.MeshBasicMaterial();
+        material.map = texture;
+        return material;
+      }
+
+      //create lightpoint
+      function createLightPoint(xaxis, zaxis) {
+        var lightPoint = new THREE.DirectionalLight(0x404040, 10);
+        lightPoint.name = "DirectionalLight";
+        lightPoint.position.y += xaxis;
+        lightPoint.position.z += zaxis;
+        scene.add(lightPoint);
+      }
+
+      function initStats() {
+        stats = new Stats();
+
+        stats.setMode(0); // 0: fps, 1: ms
+        // Align top-left
+        stats.domElement.style.position = "absolute";
+        stats.domElement.style.left = "50px";
+        stats.domElement.style.top = "50px";
+
+        document.getElementById("Stats-output").appendChild(stats.domElement);
+
+        return stats;
+      }
+
+
+      function animate(time) {
+        stats.update();
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+        sphere.rotation.z = Date.now()* 0.0002;
+      }
+      init();
+
+      createLightPoint(30, 20);
+      requestAnimationFrame(animate);
+
+      addSphere("./textures/sunmap.jpg", -45);
+      addSphere("./textures/mercurymap.jpg", -35);
+      addSphere("./textures/venusmap.jpg", -25);
+      addSphere("./textures/earthmap1k.jpg", -15);
+      addSphere("./textures/mars_1k_color.jpg", -5);
+      addSphere("./textures/jupitermap.jpg", 5);
+      addSphere("./textures/saturnmap.jpg", 15);
+      addSphere("./textures/uranusmap.jpg", 25);
+      addSphere("./textures/neptunemap.jpg", 35);
+      addSphere("./textures/plutomap1k.jpg", 45);
+      renderLoop();
+    </script>
+  </body>
+</html>
