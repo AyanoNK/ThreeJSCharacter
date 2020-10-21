@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personaje</title>
+  </head>
+  <body>
+    <div id="Stats-output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script>
+    <script>
+
+//globals
+var scene;
+var camera;
+var renderer;
+var controls;
+
+//colors
+var red = 0xfd0001;
+var brown = 0x814e19;
+var yellow = 0xfbc33b;
+
+/*BEGINNING OF PAGE CONFIG*/
+function init() {
+  //create scene
+  scene = new THREE.Scene();
+  //create camera
+  createCamera();
+  //create renderer
+  renderer = new THREE.WebGLRenderer({
+    antialias: true,
+  });
+  //set renderer size
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  scene.background = new THREE.Color(0x353839);
+  //scene.background = new THREE.Color(0xFFFFFF);
+}
+
+function createCamera() {
+  camera = new THREE.PerspectiveCamera(
+    90, //fov
+    window.innerWidth / window.innerHeight, //aspect
+    0.1, //near
+    2000 //far
+  );
+
+  camera.position.set(0, 0, 60);
+
+  camera.translateZ(50);
+}
+
+function renderLoop() {
+  requestAnimationFrame(renderLoop);
+  renderer.render(scene, camera);
+}
+/*END OF PAGE CONFIG*/
+
+function addCube(xaxis, yaxis, materialcolor) {
+  var geometry = new THREE.BoxGeometry(1, 1, 1);
+
+  //to show edges
+  var edges = new THREE.EdgesGeometry(geometry);
+  var line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({
+      color: 0x000000,
+    })
+  );
+  line.name = "Cube Edges";
+
+  var material = new THREE.MeshBasicMaterial({
+    color: materialcolor,
+  });
+
+  var cube = new THREE.Mesh(geometry, material);
+
+  cube.position.x += xaxis;
+  cube.position.y += yaxis;
+
+  line.position.x += xaxis;
+  line.position.y += yaxis;
+
+  if (materialcolor == red) {
+    cube.name = "Red Cube";
+  } else if (materialcolor == yellow) {
+    cube.name = "Yellow Cube";
+  } else if (materialcolor == brown) {
+    cube.name = "Brown Cube";
+  } else {
+    cube.name = "Cube";
+  }
+  scene.add(line);
+  scene.add(cube);
+}
+
+function addLight() {
+  var light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.setScalar(10);
+  scene.add(light);
+}
+
+function addPlane() {
+  var geometry = new THREE.PlaneGeometry(150, 106, 1, 1);
+
+  //create texture
+  var texture = new THREE.TextureLoader().load("./img/background.jpg");
+
+  var material = new THREE.MeshBasicMaterial({
+    map: texture,
+  });
+  var plane = new THREE.Mesh(geometry, material);
+  plane.position.set(13, 42, -0.53);
+  scene.add(plane);
+}
+
+
+
+
+
+//create lightpoint
+function createLightPoint() {
+  var lightPoint = new THREE.DirectionalLight(0x404040, 10);
+  lightPoint.name = "DirectionalLight";
+  lightPoint.position.y += 30;
+  scene.add(lightPoint);
+}
+
+
+init();
+
+//Mario by cubes
+
+//first line
+addCube(-2, 16, red);
+
+
+createLightPoint();
+
+addPlane();
+renderLoop();
+
+    </script>
+  </body>
+</html>
