@@ -19,6 +19,11 @@ var camera;
 var renderer;
 var controls;
 
+//elements
+var computerTab;
+var playerTab;
+
+
 //colors
 var red = 0xfd0001;
 var brown = 0x814e19;
@@ -61,62 +66,56 @@ function renderLoop() {
 }
 /*END OF PAGE CONFIG*/
 
-function addCube(xaxis, yaxis, materialcolor) {
-  var geometry = new THREE.BoxGeometry(1, 1, 1);
+function addComputerTab() {
+  var geometry = new THREE.BoxGeometry(10, 10, 10);
 
   //to show edges
   var edges = new THREE.EdgesGeometry(geometry);
-  var line = new THREE.LineSegments(
-    edges,
-    new THREE.LineBasicMaterial({
-      color: 0x000000,
-    })
-  );
-  line.name = "Cube Edges";
+  
 
   var material = new THREE.MeshBasicMaterial({
-    color: materialcolor,
+    color: 0xF484FF,
   });
 
+  
+  computerTab = new THREE.Mesh(geometry, material);
+  computerTab.name = "ComputerCube";
+  scene.add(computerTab);
+  computerTab.position.y -= 50;
+}
+
+function addPlayerTab() {
+  var geometry = new THREE.BoxGeometry(10, 10, 10);
+
+  //to show edges
+  var edges = new THREE.EdgesGeometry(geometry);
+  
+
+  var material = new THREE.MeshBasicMaterial({
+    color: 0x6854FF,
+  });
+
+  
+  var playerTab = new THREE.Mesh(geometry, material);
+  playerTab.name = "ComputerCube";
+  scene.add(playerTab);
+  playerTab.position.y += 50;
+}
+
+
+function addBall() {
+  var geometry = new THREE.BoxGeometry(5, 5, 5);
+
+  //to show edges
+  var edges = new THREE.EdgesGeometry(geometry);
+
+  var material = new THREE.MeshBasicMaterial({
+    color: 0xFF0000,
+  });
+ 
   var cube = new THREE.Mesh(geometry, material);
-
-  cube.position.x += xaxis;
-  cube.position.y += yaxis;
-
-  line.position.x += xaxis;
-  line.position.y += yaxis;
-
-  if (materialcolor == red) {
-    cube.name = "Red Cube";
-  } else if (materialcolor == yellow) {
-    cube.name = "Yellow Cube";
-  } else if (materialcolor == brown) {
-    cube.name = "Brown Cube";
-  } else {
-    cube.name = "Cube";
-  }
-  scene.add(line);
+  cube.name = "ComputerCube";
   scene.add(cube);
-}
-
-function addLight() {
-  var light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.setScalar(10);
-  scene.add(light);
-}
-
-function addPlane() {
-  var geometry = new THREE.PlaneGeometry(150, 106, 1, 1);
-
-  //create texture
-  var texture = new THREE.TextureLoader().load("./img/background.jpg");
-
-  var material = new THREE.MeshBasicMaterial({
-    map: texture,
-  });
-  var plane = new THREE.Mesh(geometry, material);
-  plane.position.set(13, 42, -0.53);
-  scene.add(plane);
 }
 
 
@@ -137,12 +136,13 @@ init();
 //Mario by cubes
 
 //first line
-addCube(-2, 16, red);
+addComputerTab();
+addPlayerTab();
+addBall();
 
 
 createLightPoint();
 
-addPlane();
 renderLoop();
 
     </script>
