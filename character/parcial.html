@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script>
+    <script src='../threejs/threex.keyboardstate.js'></script>
     <script>
 
 //globals
@@ -63,6 +64,7 @@ function createCamera() {
 function renderLoop() {
   requestAnimationFrame(renderLoop);
   renderer.render(scene, camera);
+  
 }
 /*END OF PAGE CONFIG*/
 
@@ -81,7 +83,7 @@ function addComputerTab() {
   computerTab = new THREE.Mesh(geometry, material);
   computerTab.name = "ComputerCube";
   scene.add(computerTab);
-  computerTab.position.y -= 50;
+  computerTab.position.y += 50;
 }
 
 function addPlayerTab() {
@@ -97,9 +99,9 @@ function addPlayerTab() {
 
   
   var playerTab = new THREE.Mesh(geometry, material);
-  playerTab.name = "ComputerCube";
+  playerTab.name = "PlayerCube";
   scene.add(playerTab);
-  playerTab.position.y += 50;
+  playerTab.position.y -= 50;
 }
 
 
@@ -114,34 +116,42 @@ function addBall() {
   });
  
   var cube = new THREE.Mesh(geometry, material);
-  cube.name = "ComputerCube";
+  cube.name = "Ball";
   scene.add(cube);
 }
 
 
-
-
-
-//create lightpoint
-function createLightPoint() {
-  var lightPoint = new THREE.DirectionalLight(0x404040, 10);
-  lightPoint.name = "DirectionalLight";
-  lightPoint.position.y += 30;
-  scene.add(lightPoint);
+function playerMovement() {
+  var keyboard	= new THREEx.KeyboardState();
+  if( keyboard.pressed('left') ){
+    // playerTab.position.x -= 1;	
+    console.log('left');		
+  }
+  if( keyboard.pressed('right')) {
+    playerTab.position.x += 1;;
+  }
 }
+
+function animate(time) {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+        counter = 0;
+        while( counter <= 10) {
+          computerTab.position.x += 0.001;
+          counter+=1;
+        }        
+      }
 
 
 init();
 
-//Mario by cubes
+requestAnimationFrame(animate);
 
-//first line
 addComputerTab();
 addPlayerTab();
 addBall();
 
 
-createLightPoint();
 
 renderLoop();
 
