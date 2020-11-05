@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personaje</title>
+  </head>
+  <body>
+    <div id="Stats-output"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r120/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.js"></script>
+    <script src="../threejs/threex.keyboardstate.js"></script>
+    <script>
+      //globals
+      var scene;
+      var camera;
+      var renderer;
+      var controls;
+
+      /*BEGINNING OF PAGE CONFIG*/
+      function init() {
+        //create scene
+        scene = new THREE.Scene();
+        //create camera
+        createCamera();
+        //create renderer
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+        });
+        //set renderer size
+        renderer.setSize(window.innerWidth - 50, window.innerHeight - 50);
+        document.body.appendChild(renderer.domElement);
+
+        scene.background = new THREE.Color(0x353839);
+        //scene.background = new THREE.Color(0xFFFFFF);
+      }
+
+      function createCamera() {
+        camera = new THREE.PerspectiveCamera(
+          90, //fov
+          window.innerWidth / window.innerHeight, //aspect
+          0.1, //near
+          2000 //far
+        );
+
+        camera.position.set(0, 0, 60);
+
+        camera.translateZ(50);
+      }
+
+      function renderLoop() {
+        requestAnimationFrame(renderLoop);
+        renderer.render(scene, camera);
+      }
+      /*END OF PAGE CONFIG*/
+
+      function animate(time) {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      init();
+
+      requestAnimationFrame(animate);
+
+      renderLoop();
+    </script>
+  </body>
+</html>
