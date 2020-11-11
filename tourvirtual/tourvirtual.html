@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <title>Tour Virtual</title>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img src="./img/stairsequi.jpg" alt="Primeras escaleras" id="a1" />
+        <img src="./img/stair2.jpg" alt="Segundas escaleras" id="a2" />
+        <img src="./img/sepiaplace.png" alt="Sitio blanco negro" id="a3" />
+        <img src="./img/colorplace.jpg" alt="Sitio a color" id="a4" />
+        <audio
+          id="spok"
+          src="./sound/audio.mp3"
+          preload="auto"
+          loop="true"
+          autoplay="true"
+        ></audio>
+      </a-assets>
+
+      <a-image src="#a1" position="0 1.8 -3" onclick="show('a1')"></a-image>
+      <a-image src="#a2" position="-1.5 1.8 -3" onclick="show('a2')"></a-image>
+      <a-image src="#a3" position="1.5 1.8 -3" onclick="show('a3')"></a-image>
+      <a-image src="#a4" position="0 3 -3" onclick="show('a4')"></a-image>
+      <a-sky src="#a1" id="cielo"></a-sky>
+      <a-camera>
+        <a-cursor color="white" fuse="true"></a-cursor>
+      </a-camera>
+    </a-scene>
+    <script>
+      function show(id) {
+        document.getElementById("cielo").setAttribute("src", "#" + id);
+      }
+    </script>
+  </body>
+</html>
