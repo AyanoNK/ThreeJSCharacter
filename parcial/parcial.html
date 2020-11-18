@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bezier</title>
+  </head>
+  <body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.85.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+      //globals
+      var scene;
+      var camera;
+      var renderer;
+      var controls;
+
+      //colors
+      var red = 0xfd0001;
+      var brown = 0x814e19;
+      var yellow = 0xfbc33b;
+
+      /*BEGINNING OF PAGE CONFIG*/
+      function init() {
+        //create scene
+        scene = new THREE.Scene();
+        //create camera
+        createCamera();
+        //create renderer
+        renderer = new THREE.WebGLRenderer({
+          antialias: true,
+        });
+        //set renderer size
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        scene.background = new THREE.Color(0x353839);
+        //scene.background = new THREE.Color(0xFFFFFF);
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+      }
+
+      function createCamera() {
+        camera = new THREE.PerspectiveCamera(
+          90, //fov
+          window.innerWidth / window.innerHeight, //aspect
+          0.1, //near
+          2000 //far
+        );
+
+        camera.position.set(0, 0, 60);
+
+        camera.translateZ(50);
+      }
+
+      function renderLoop() {
+        requestAnimationFrame(renderLoop);
+        renderer.render(scene, camera);
+        controls.update();
+      }
+      /*END OF PAGE CONFIG*/
+
+      function createLightPoint(x, y, z) {
+        var lightPoint = new THREE.DirectionalLight(0x404040, 10);
+        lightPoint.name = "DirectionalLight";
+        lightPoint.position.set(x, y, z);
+        scene.add(lightPoint);
+      }
+
+      function skullBot() {
+        var loader = new THREE.GLTFLoader();
+        loader.load("./res/skullbot.glb", function (geometry) {
+          mesh = geometry.scene;
+          mesh.children.material = new THREE.MeshBasicMaterial();
+          mesh.scale.set(10, 10, 10);
+          scene.add(mesh);
+        });
+      }
+      function skullTop() {
+        var loader = new THREE.GLTFLoader();
+        loader.load("./res/skulltop.glb", function (geometry) {
+          mesh = geometry.scene;
+          mesh.children.material = new THREE.MeshBasicMaterial();
+          mesh.scale.set(10, 10, 10);
+          scene.add(mesh);
+        });
+      }
+
+      const Floader = new THREE.FontLoader();
+      Floader.load("./res/helvetiker_regular.typeface.json", function (font) {
+        const text = new THREE.TextGeometry("Hello three.js!", {
+          font: font,
+          size: 80,
+          height: 5,
+          curveSegments: 12,
+          bevelEnabled: true,
+          bevelThickness: 10,
+          bevelSize: 8,
+          bevelOffset: 0,
+          bevelSegments: 5,
+        });
+
+        scene.add(text);
+      });
+
+      init();
+      skullBot();
+      skullTop();
+      createLightPoint(0, 30, 0);
+      createLightPoint(0, -30, 0);
+
+      renderLoop();
+    </script>
+  </body>
+</html>
