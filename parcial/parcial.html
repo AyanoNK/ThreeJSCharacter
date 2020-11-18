@@ -78,16 +78,27 @@
         loader.load("./res/skullbot.glb", function (geometry) {
           mesh = geometry.scene;
           mesh.children.material = new THREE.MeshBasicMaterial();
-          mesh.scale.set(10, 10, 10);
+          mesh.scale.set(30, 30, 30);
           scene.add(mesh);
         });
       }
+
+      function listener() {
+        console.log(true);
+      }
+
       function skullTop() {
         var loader = new THREE.GLTFLoader();
+        var eventer = new THREE.EventDispatcher();
         loader.load("./res/skulltop.glb", function (geometry) {
           mesh = geometry.scene;
           mesh.children.material = new THREE.MeshBasicMaterial();
-          mesh.scale.set(10, 10, 10);
+          mesh.scale.set(30, 30, 30);
+          mesh.addEventListener = eventer.addEventListener(
+            "click",
+            onclick,
+            listener
+          );
           scene.add(mesh);
         });
       }
