@@ -7,6 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
     <script src="https://unpkg.com/three@0.85.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script> -->
+    <script type="text/javascript" src="../threejs/dat.gui.min.js"></script>
 
     <title>Parcial Final</title>
   </head>
@@ -17,10 +19,26 @@
       var camera;
       var renderer;
       var controls;
+      var model;
+
+      const Gloader = new THREE.GLTFLoader();
+      Gloader.load("./res/skullbot.glb", (geometry) => {
+        model = geometry.scene;
+        model.children.material = new THREE.MeshBasicMaterial();
+        model.scale.set(30, 30, 30);
+        scene.add(model);
+      });
 
       // font settings
       var fontName = "helvetiker"; // helvetiker, optimer, gentilis, droid sans, droid serif
       var fontWeight = "regular";
+
+      var controls = new (function () {
+        this.position = 0.0;
+      })();
+
+      var gui = new dat.GUI();
+      gui.add(controls, "position", 0, 5);
 
       /*BEGINNING OF PAGE CONFIG*/
       function init() {
@@ -40,7 +58,6 @@
         const bgTexture = new THREE.TextureLoader().load("./res/bg.jpg");
 
         scene.background = bgTexture;
-        //scene.background = new THREE.Color(0xFFFFFF);
         controls = new THREE.OrbitControls(camera, renderer.domElement);
       }
 
@@ -57,11 +74,6 @@
         camera.translateZ(50);
       }
 
-      function renderLoop() {
-        requestAnimationFrame(renderLoop);
-        renderer.render(scene, camera);
-        controls.update();
-      }
       /*END OF PAGE CONFIG*/
 
       function createLightPoint(x, y, z) {
@@ -69,16 +81,6 @@
         lightPoint.name = "DirectionalLight";
         lightPoint.position.set(x, y, z);
         scene.add(lightPoint);
-      }
-
-      function skullBot() {
-        var loader = new THREE.GLTFLoader();
-        loader.load("./res/skullbot.glb", function (geometry) {
-          mesh = geometry.scene;
-          mesh.children.material = new THREE.MeshBasicMaterial();
-          mesh.scale.set(30, 30, 30);
-          scene.add(mesh);
-        });
       }
 
       function listener() {
@@ -122,7 +124,6 @@
               let mesh = new THREE.Mesh(geometry, material);
               scene.add(mesh);
               mesh.position.set(-115, -60, 0);
-              console.log(mesh.position);
             }
           );
         } catch (e) {
@@ -227,30 +228,43 @@
         return mesh;
       }
 
-      function InstructionsPane() {
+      function PaneAdder(text, h1, h2, fs, tc, pc, x, y, z) {
         // Texto, altura texto, altura plano, fontSize, color texto, color plano
-        var mesh = TextBox(
-          "Da click a los dientes",
-          10,
-          15,
-          50,
-          0x000000,
-          0x155ccf
-        );
-
-        mesh.position.set(-100, 30, 0);
+        var mesh = TextBox(text, h1, h2, fs, tc, pc);
+        mesh.position.set(x, y, z);
 
         scene.add(mesh);
       }
 
+      function animate(time) {
+        if (model) model.position.x += 0.0;
+        // console.log(controls.position);
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      function dientesIncisivos() {}
+
       init();
-      skullBot();
+
       skullTop();
       createLightPoint(0, 30, 0);
       createLightPoint(0, -30, 0);
       loadText("Dentadura Humana");
-      InstructionsPane();
-      renderLoop();
+      PaneAdder(
+        "Da click a los dientes",
+        10,
+        15,
+        50,
+        0x000000,
+        0x155ccf,
+        -100,
+        30,
+        0
+      );
+      dientesIncisivos();
+
+      requestAnimationFrame(animate);
     </script>
   </body>
 </html>
