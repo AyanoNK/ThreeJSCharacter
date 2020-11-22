@@ -243,7 +243,38 @@
         requestAnimationFrame(animate);
       }
 
-      function dientesIncisivos() {}
+      function dientesIncisivos() {
+        var Dgeometry = new THREE.PlaneGeometry(24, 53, 1, 1);
+        //create texture
+        var Dtexture = new THREE.TextureLoader().load("./img/incisivos.jpg");
+        var Dmaterial = new THREE.MeshBasicMaterial({
+          map: Dtexture,
+          side: THREE.DoubleSide,
+        });
+        var Dplane = new THREE.Mesh(Dgeometry, Dmaterial);
+        Dplane.position.set(60, 25, -10);
+
+        var Igeometry = new THREE.PlaneGeometry(102, 51, 1, 1);
+        //create texture
+        var Itexture = new THREE.TextureLoader().load(
+          "./img/dataincisivos.jpg"
+        );
+        Itexture.wrapS = THREE.RepeatWrapping;
+        Itexture.repeat.x = 1;
+
+        var Imaterial = new THREE.MeshBasicMaterial({
+          map: Itexture,
+          side: THREE.DoubleSide,
+        });
+        var Iplane = new THREE.Mesh(Igeometry, Imaterial);
+        Iplane.position.set(130, 30, -20);
+
+        scene.add(Dplane);
+        scene.add(Iplane);
+      }
+      function dientesCaninos() {}
+      function dientesPremolares() {}
+      function dientesMolares() {}
 
       init();
 
