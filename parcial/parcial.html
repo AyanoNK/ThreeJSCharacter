@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script> -->
     <script type="text/javascript" src="../threejs/dat.gui.min.js"></script>
+    <script src="../threejs/threex.domevents.js"></script>
 
     <title>Parcial Final</title>
   </head>
@@ -243,7 +244,7 @@
         requestAnimationFrame(animate);
       }
 
-      function infoShower(pathToImage, pathToInfo, xImg, yImg) {
+      function infoShower(pathToImage, pathToInfo, xImg, yImg, status, name) {
         var Dgeometry = new THREE.PlaneGeometry(24, 53, 1, 1);
         //create texture
         var Dtexture = new THREE.TextureLoader().load(pathToImage);
@@ -266,9 +267,131 @@
         });
         var Iplane = new THREE.Mesh(Igeometry, Imaterial);
         Iplane.position.set(130, 25, -10);
-
-        scene.add(Dplane);
+        Iplane.name = "PlanoImagen";
+        Dplane.name = "DescImagen";
         scene.add(Iplane);
+        scene.add(Dplane);
+      }
+
+      function DientesCaninos(status) {
+        infoShower(
+          "./img/caninos.jpg",
+          "./img/datacaninos.jpg",
+          51,
+          102,
+          status
+        );
+      }
+      function DientesPremolares(status) {
+        infoShower(
+          "./img/premolares.jpg",
+          "./img/datapremolares.jpg",
+          89,
+          106,
+          status
+        );
+      }
+      function DientesMolares(status) {
+        infoShower(
+          "./img/molares.jpg",
+          "./img/datamolares.jpg",
+          90,
+          100,
+          status
+        );
+      }
+
+      function IncisivoListener() {
+        var geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+        //create texture
+        var material = new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          side: THREE.DoubleSide,
+          opacity: 0.0,
+          transparent: true,
+        });
+        var plane = new THREE.Mesh(geometry, material);
+
+        plane.position.set(5, 4, 35);
+        const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
+        domEvents.addEventListener(plane, "click", (event) => {
+          infoShower("./img/incisivos.jpg", "./img/dataincisivos.jpg", 51, 102);
+        });
+        scene.add(plane);
+      }
+      function CaninoListener(planeX, planeY, planeZ) {
+        var geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+        //create texture
+        var material = new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          side: THREE.DoubleSide,
+          opacity: 0.0,
+          transparent: true,
+        });
+        var plane = new THREE.Mesh(geometry, material);
+
+        plane.position.set(planeX, planeY, planeZ);
+        const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
+        domEvents.addEventListener(plane, "click", (event) => {
+          infoShower(
+            "./img/caninos.jpg",
+            "./img/datacaninos.jpg",
+            51,
+            102,
+            status
+          );
+        });
+        scene.add(plane);
+      }
+
+      function PremolarListener(planeX, planeY, planeZ) {
+        var geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+        //create texture
+        var material = new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          side: THREE.DoubleSide,
+          opacity: 0.0,
+          transparent: true,
+        });
+        var plane = new THREE.Mesh(geometry, material);
+
+        plane.position.set(planeX, planeY, planeZ);
+        const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
+        domEvents.addEventListener(plane, "click", (event) => {
+          infoShower(
+            "./img/premolares.jpg",
+            "./img/datapremolares.jpg",
+            51,
+            102,
+            status
+          );
+        });
+        scene.add(plane);
+      }
+
+      function MolarListener(planeX, planeY, planeZ) {
+        var geometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+        //create texture
+        var material = new THREE.MeshBasicMaterial({
+          color: 0x000000,
+          side: THREE.DoubleSide,
+          opacity: 0.0,
+          transparent: true,
+        });
+        var plane = new THREE.Mesh(geometry, material);
+
+        plane.position.set(planeX, planeY, planeZ);
+        const domEvents = new THREEx.DomEvents(camera, renderer.domElement);
+        domEvents.addEventListener(plane, "click", (event) => {
+          infoShower(
+            "./img/molares.jpg",
+            "./img/datamolares.jpg",
+            51,
+            102,
+            status
+          );
+        });
+        scene.add(plane);
       }
 
       init();
@@ -278,7 +401,7 @@
       createLightPoint(0, -30, 0);
       loadText("Dentadura Humana");
       PaneAdder(
-        "Da click a los dientes",
+        "Da click sobre los dientes!",
         10,
         15,
         50,
@@ -288,11 +411,13 @@
         30,
         0
       );
-      // infoShower("./img/incisivos.jpg", "./img/dataincisivos.jpg", 102, 51);
-      // infoShower("./img/caninos.jpg", "./img/datacaninos.jpg", 102, 51);
-      // infoShower("./img/premolares.jpg", "./img/datapremolares.jpg", 102, 51);
-      infoShower("./img/molares.jpg", "./img/datamolares.jpg", 136, 109);
-
+      IncisivoListener();
+      CaninoListener(10, 4, 35);
+      CaninoListener(0, 4, 35);
+      PremolarListener(-2, 4, 33);
+      PremolarListener(12, 4, 33);
+      MolarListener(14, 6, 25);
+      MolarListener(-3.5, 6, 25);
       requestAnimationFrame(animate);
     </script>
   </body>
