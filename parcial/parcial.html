@@ -243,10 +243,10 @@
         requestAnimationFrame(animate);
       }
 
-      function dientesIncisivos() {
+      function infoShower(pathToImage, pathToInfo, xImg, yImg) {
         var Dgeometry = new THREE.PlaneGeometry(24, 53, 1, 1);
         //create texture
-        var Dtexture = new THREE.TextureLoader().load("./img/incisivos.jpg");
+        var Dtexture = new THREE.TextureLoader().load(pathToImage);
         var Dmaterial = new THREE.MeshBasicMaterial({
           map: Dtexture,
           side: THREE.DoubleSide,
@@ -254,11 +254,9 @@
         var Dplane = new THREE.Mesh(Dgeometry, Dmaterial);
         Dplane.position.set(60, 25, -10);
 
-        var Igeometry = new THREE.PlaneGeometry(102, 51, 1, 1);
+        var Igeometry = new THREE.PlaneGeometry(yImg, xImg, 1, 1);
         //create texture
-        var Itexture = new THREE.TextureLoader().load(
-          "./img/dataincisivos.jpg"
-        );
+        var Itexture = new THREE.TextureLoader().load(pathToInfo);
         Itexture.wrapS = THREE.RepeatWrapping;
         Itexture.repeat.x = 1;
 
@@ -267,14 +265,11 @@
           side: THREE.DoubleSide,
         });
         var Iplane = new THREE.Mesh(Igeometry, Imaterial);
-        Iplane.position.set(130, 30, -20);
+        Iplane.position.set(130, 25, -10);
 
         scene.add(Dplane);
         scene.add(Iplane);
       }
-      function dientesCaninos() {}
-      function dientesPremolares() {}
-      function dientesMolares() {}
 
       init();
 
@@ -293,7 +288,10 @@
         30,
         0
       );
-      dientesIncisivos();
+      // infoShower("./img/incisivos.jpg", "./img/dataincisivos.jpg", 102, 51);
+      // infoShower("./img/caninos.jpg", "./img/datacaninos.jpg", 102, 51);
+      // infoShower("./img/premolares.jpg", "./img/datapremolares.jpg", 102, 51);
+      infoShower("./img/molares.jpg", "./img/datamolares.jpg", 136, 109);
 
       requestAnimationFrame(animate);
     </script>
