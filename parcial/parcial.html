@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
     <script src="https://unpkg.com/three@0.85.0/examples/js/controls/OrbitControls.js"></script>
@@ -19,10 +18,9 @@
       var renderer;
       var controls;
 
-      //colors
-      var red = 0xfd0001;
-      var brown = 0x814e19;
-      var yellow = 0xfbc33b;
+      // font settings
+      var fontName = "helvetiker"; // helvetiker, optimer, gentilis, droid sans, droid serif
+      var fontWeight = "regular";
 
       /*BEGINNING OF PAGE CONFIG*/
       function init() {
@@ -103,27 +101,41 @@
         });
       }
 
-      function generateText() {
-        const Floader = new FontLoader();
-
-        Floader.load("./res/helvetiker_regular.typeface.json", function (font) {
-          var geometry = new THREE.TextGeometry(
-            ("ar",
-            {
-              font: font,
-              size: 40,
-            })
+      function loadText(text) {
+        const loader = new THREE.FontLoader();
+        try {
+          loader.load(
+            "res/" + fontName + "_" + fontWeight + ".typeface.json",
+            function (font) {
+              const geometry = new THREE.TextGeometry(text, {
+                font: font,
+                size: 20,
+                height: 1,
+                curveSegments: 6,
+                bevelEnabled: true,
+                bevelThickness: 1,
+                bevelSize: 0,
+                bevelOffset: 0,
+                bevelSegments: 0,
+              });
+              const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+              let mesh = new THREE.Mesh(geometry, material);
+              scene.add(mesh);
+              mesh.position.set(-105, -70, 0);
+              console.log(mesh.position);
+            }
           );
-        });
+        } catch (e) {
+          console.error(e.message);
+        }
       }
 
       init();
       skullBot();
       skullTop();
-      // generateText();
       createLightPoint(0, 30, 0);
       createLightPoint(0, -30, 0);
-
+      loadText("Dientes Humanos");
       renderLoop();
     </script>
   </body>
