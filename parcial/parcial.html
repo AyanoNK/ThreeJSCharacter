@@ -7,8 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js"></script>
     <script src="https://unpkg.com/three@0.85.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.js"></script> -->
-    <script type="text/javascript" src="../threejs/dat.gui.min.js"></script>
     <script src="../threejs/threex.domevents.js"></script>
 
     <title>Parcial Final</title>
@@ -19,7 +17,6 @@
       var scene;
       var camera;
       var renderer;
-      var controls;
       var model;
 
       const Gloader = new THREE.GLTFLoader();
@@ -33,13 +30,6 @@
       // font settings
       var fontName = "helvetiker"; // helvetiker, optimer, gentilis, droid sans, droid serif
       var fontWeight = "regular";
-
-      var controls = new (function () {
-        this.position = 0.0;
-      })();
-
-      var gui = new dat.GUI();
-      gui.add(controls, "position", 0, 5);
 
       /*BEGINNING OF PAGE CONFIG*/
       function init() {
@@ -237,13 +227,6 @@
         scene.add(mesh);
       }
 
-      function animate(time) {
-        if (model) model.position.x += 0.0;
-        // console.log(controls.position);
-        renderer.render(scene, camera);
-        requestAnimationFrame(animate);
-      }
-
       function infoShower(pathToImage, pathToInfo, xImg, yImg, status, name) {
         var Dgeometry = new THREE.PlaneGeometry(24, 53, 1, 1);
         //create texture
@@ -271,34 +254,6 @@
         Dplane.name = "DescImagen";
         scene.add(Iplane);
         scene.add(Dplane);
-      }
-
-      function DientesCaninos(status) {
-        infoShower(
-          "./img/caninos.jpg",
-          "./img/datacaninos.jpg",
-          51,
-          102,
-          status
-        );
-      }
-      function DientesPremolares(status) {
-        infoShower(
-          "./img/premolares.jpg",
-          "./img/datapremolares.jpg",
-          89,
-          106,
-          status
-        );
-      }
-      function DientesMolares(status) {
-        infoShower(
-          "./img/molares.jpg",
-          "./img/datamolares.jpg",
-          90,
-          100,
-          status
-        );
       }
 
       function IncisivoListener() {
@@ -394,6 +349,39 @@
         scene.add(plane);
       }
 
+      function InfoPlane() {
+        var geometry = new THREE.PlaneGeometry(150, 106, 1, 1);
+
+        //create texture
+        var texture = new THREE.TextureLoader().load("./img/info.jpg");
+
+        var material = new THREE.MeshBasicMaterial({
+          map: texture,
+        });
+        var plane = new THREE.Mesh(geometry, material);
+        plane.position.set(13, 42, -60);
+        scene.add(plane);
+      }
+
+      var ballpositioner = 0;
+      function animate(time) {
+        if (model) {
+          if (ballpositioner < 3) {
+            model.rotation.x += 0.001;
+            ballpositioner += 0.01;
+          } else if (ballpositioner >= 3) {
+            model.rotation.x -= 0.001;
+            ballpositioner += 0.01;
+            if (ballpositioner >= 6) {
+              model.position.x = 0.0;
+              ballpositioner = 0;
+            }
+          }
+        }
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
       init();
 
       skullTop();
@@ -418,6 +406,7 @@
       PremolarListener(12, 4, 33);
       MolarListener(14, 6, 25);
       MolarListener(-3.5, 6, 25);
+      InfoPlane();
       requestAnimationFrame(animate);
     </script>
   </body>
