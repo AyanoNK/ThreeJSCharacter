@@ -118,10 +118,10 @@
                 bevelOffset: 0,
                 bevelSegments: 0,
               });
-              const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+              const material = new THREE.MeshBasicMaterial({ color: 0xe4e4e4 });
               let mesh = new THREE.Mesh(geometry, material);
               scene.add(mesh);
-              mesh.position.set(-105, -70, 0);
+              mesh.position.set(-115, -60, 0);
               console.log(mesh.position);
             }
           );
@@ -130,12 +130,126 @@
         }
       }
 
+      // Los parametros de la funcion para agregar text boxes son
+      // txt como el texto
+      // planeTextHeight es la altura del texto en el plano
+      // planeHeight es la altura del plano conteniendo el texto
+      // inputTextSize es el size del texto
+      // fg color es el color del texto
+      // bg color es el color del panel
+      function TextBox(
+        txt,
+        planeTextHeight,
+        planeHeight,
+        inputTextSize,
+        textPlaneColor,
+        planeBackgroundColor
+      ) {
+        // init config
+        var parameterconfig = planeTextHeight / inputTextSize;
+        // se establece la altura como maximo de los parametros
+        var MaximumHeight = Math.ceil(planeHeight / parameterconfig);
+
+        // se crea un canvas inicial para la textura
+        // THREEjs establece que lo más fácil es usar DOM y CSS para traer
+        // texto de por fuera a ThreeJS, entonces
+        // se crea el elemento canvas
+        var txtcanvas = document.createElement("canvas");
+        // getContext() devuelve un contexto de dibujo en el canvas
+        var canvasContext = txtcanvas.getContext("2d");
+        // la fuente viene directamente de las estandar de web
+        canvasContext.font = inputTextSize + "px sans-serif";
+        // se establecen los anchos, la idea es convertir el canvas en una textura de THREEjs
+        // anchura del texto en el canvas
+        var canvasHeight = canvasContext.measureText(txt).width;
+        // anchura del texto en el plano
+        var textWidthInPlane = canvasHeight * parameterconfig;
+        // Se calcula la anchura de todo el plano como tal
+        var CalcPlaneWidth = textWidthInPlane + (planeHeight - planeTextHeight);
+        // Se establece  el maximo de toda la textura de canvas
+        var MaxTextureCanvas = Math.ceil(CalcPlaneWidth / parameterconfig);
+        // Ahora, con los datos, se puede darle forma al canvas para el texto
+        txtcanvas.width = MaxTextureCanvas;
+        txtcanvas.height = MaximumHeight;
+        // Siguiente es el color.
+        // Si se da un color, se ejecuta la sentencia, sino, no.
+        if (planeBackgroundColor != undefined) {
+          // La idea de este punto es agararr el hex como parametro y
+          // llenar el canvas
+          canvasContext.fillStyle =
+            "#" + planeBackgroundColor.toString(16).padStart(6, "0");
+          canvasContext.fillRect(0, 0, MaxTextureCanvas, MaximumHeight);
+        }
+        // Caracteres del canvas. Por defecto, el texto está centrado y en la mitad.
+        // Se podrían agregar parámetros para cambiar esto.
+        canvasContext.textAlign = "center";
+        canvasContext.textBaseline = "middle";
+        // Se agrega el color al texto.
+        canvasContext.fillStyle =
+          "#" + textPlaneColor.toString(16).padStart(6, "0"); // textPlaneColor
+        canvasContext.font = inputTextSize + "px sans-serif";
+
+        // Se llena el texto al canvas, y queda listo.
+        canvasContext.fillText(txt, MaxTextureCanvas / 2, MaximumHeight / 2);
+
+        // Lo siguiente es convertir ese canvas en una textura. Aquí es
+        // donde entra THREEjs
+        var texture = new THREE.Texture(txtcanvas);
+        // Hay un mensaje de consola ahi que segun se borra con esto
+        texture.minFilter = THREE.LinearFilter;
+        texture.needsUpdate = true;
+
+        // Se hace el plano con la textura.
+        geometry = new THREE.PlaneGeometry(CalcPlaneWidth, planeHeight);
+        var material = new THREE.MeshBasicMaterial({
+          side: THREE.DoubleSide,
+          map: texture,
+          transparent: true,
+          opacity: 1.0,
+        });
+        // mesh
+        var mesh = new THREE.Mesh(geometry, material);
+
+        // Como mesh agarro la textura con sus propiedades, entonces se pueden importar
+        // dichas propiedades dentro del mesh
+        // width del texto en el plano
+        mesh.textWidthInPlane = textWidthInPlane; // return the width of the text in the plane
+        // width de todo el plano
+        mesh.CalcPlaneWidth = CalcPlaneWidth; //    and the width of the whole plane
+        // width del texto en el canvas
+        mesh.canvasHeight = canvasHeight; //    and the width of the text in the texture canvas
+        // width del canvas entero en la textura
+        mesh.MaxTextureCanvas = MaxTextureCanvas;
+        // height del canvas entero en la textura
+        mesh.MaximumHeight = MaximumHeight;
+        // la textura en 2D
+        mesh.canvasContext = canvasContext;
+        return mesh;
+      }
+
+      function InstructionsPane() {
+        // Texto, altura texto, altura plano, fontSize, color texto, color plano
+        var mesh = TextBox(
+          "Da click a los dientes",
+          10,
+          15,
+          50,
+          0x000000,
+          0x155ccf
+        );
+
+        mesh.position.set(-100, 30, 0);
+
+        scene.add(mesh);
+      }
+
       init();
       skullBot();
       skullTop();
       createLightPoint(0, 30, 0);
       createLightPoint(0, -30, 0);
-      loadText("Dientes Humanos");
+      loadText("Dentadura Humana");
+      InstructionsPane();
       renderLoop();
     </script>
   </body>
